@@ -15,7 +15,6 @@ import Logger as _log
 import ConfigParser as cp
 import pysftp
 
-
 BASEDIR = os.path.abspath(os.path.dirname(__file__)).replace('\core', '')
 LOG_FILENAME = os.path.join(BASEDIR + '\\log', 'diff.properties')
 

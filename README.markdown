@@ -1,0 +1,1 @@
+Projeto simples em python para comparar a hora de uma maquina unix e um fax-server que nao conseguia acesso entao usei um telnet e apos o erro de conexao me retornava a hora do sistema e por fim retorno a diferença entre as horas coletada.

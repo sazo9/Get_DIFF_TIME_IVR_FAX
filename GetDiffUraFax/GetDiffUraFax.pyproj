@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>9b631629-67a7-4b95-87ed-c0452b7991be</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>core\__init__.py</StartupFile>
+    <StartupFile>start.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -14,6 +14,9 @@
     <RootNamespace>GetDiffUraFax</RootNamespace>
     <InterpreterId>{fe941f4f-bf6e-4d11-903f-e5c0ae65c0a7}</InterpreterId>
     <InterpreterVersion>2.7</InterpreterVersion>
+    <IsWindowsApplication>True</IsWindowsApplication>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,13 +27,17 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="start.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="config\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="core\color_console.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="core\__init__.py">
+    <Compile Include="core\__init__.py" />
+    <Compile Include="__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="core\Logger.py" />

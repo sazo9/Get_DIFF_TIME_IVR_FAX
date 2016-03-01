@@ -6,8 +6,8 @@ import logging
 import logging.handlers
 import os
 
-BASEDIR = os.path.abspath(os.path.dirname(__file__))
-LOG_FILENAME = os.path.join(BASEDIR + '/log', 'Log.log')
+BASEDIR = os.path.abspath(os.path.dirname(__file__)).replace('\core', '')
+LOG_FILENAME = os.path.join(BASEDIR + '\\log', 'Log.log')
 
 
 class OneLineExceptionFormatter(logging.Formatter):
@@ -34,7 +34,7 @@ def configure_logging(msg):
     f = OneLineExceptionFormatter('%(asctime)s|%(levelname)s|%(name)s|%(message)s','%d/%m/%Y %H:%M:%S')
 
     handler.setFormatter(f)
-    root = logging.getLogger('GETDIFF')
+    root = logging.getLogger('GetDiff')
     root.setLevel(logging.DEBUG)
     root.addHandler(handler)
 

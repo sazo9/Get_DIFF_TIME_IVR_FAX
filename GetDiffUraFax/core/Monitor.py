@@ -15,11 +15,9 @@ import Logger as _log
 import ConfigParser as cp
 import pysftp
 
-logging.basicConfig(level=logging.ERROR,format='%(asctime)s - %(message)s',datefmt='%Y-%m-%d %H:%M:%S')
-BASEDIR = os.path.abspath(os.path.dirname(__file__))
-LOG_FILENAME = os.path.join(BASEDIR + '\\log', 'diff.properties')
 
-logging.info('teste')
+BASEDIR = os.path.abspath(os.path.dirname(__file__)).replace('\core', '')
+LOG_FILENAME = os.path.join(BASEDIR + '\\log', 'diff.properties')
 
 default_colors = cons.get_text_attr()
 default_bg = default_colors & 0x0070
@@ -36,12 +34,15 @@ def setRed():
 def setGray():
     cons.set_text_attr(cons.FOREGROUND_INTENSITY | default_bg | cons.FOREGROUND_INTENSITY)
 
+def log(msg=None):
+    _log.configure_logging(msg)
+
 setGray()
 print("\rLoading Busca Diff Fax Ura.")
 
 #CARREGA CONTEUDO DO ARQUIVO DE CONFIGURACAO
 config = cp.ConfigParser()
-config.read('\\config\\roboConfig.config')
+config.read('config\\roboConfig.config')
 
 # CARREGA VARIAVEIS DO ARQUIVO roboConfig.config
 print('\rCarregando arquivo de configuracao.')
@@ -56,13 +57,14 @@ def isExisteDiffLog():
     try:
         if os.path.exists(BASEDIR + '\\log'):
             return True
-        else:
-            return False
-    except Exception, e:
+       
+    except BaseException, e:
         setRed()
-        "Error: %s - %s." % (e.filename,e.strerror)
+        log("Error: %s " % (e.message))
 
-if isExisteDiffLog() == False:
+    return False
+
+if not isExisteDiffLog():
     os.mkdir(BASEDIR + '\\log')
 
 
@@ -86,12 +88,12 @@ def getHoraFaxServer(aux=None):
         aux = str(int(tmp[0]) - 3)
         tmp = aux + ':'+tmp[1]+':'+tmp[2]
         print 'HORA FAX: ' + str(tmp)
-        return tmp
     else:
         tmp = ret.split(':')
         aux = str(int(tmp[0]) - 3)
         tmp = aux + ':'+tmp[1]+':'+tmp[2]
-        return tmp
+
+    return tmp
 
 # ACESSA A URA VIA SFTP PARA PEGAR HORA LOCAL
 def getHoraURA(aux=None):
@@ -103,8 +105,8 @@ def getHoraURA(aux=None):
             print 'HORA URA: ' + str(lst[4])
 
         return lst[4]
-    else:
-        return '12:20:40'
+    
+    return '12:20:40'
 
 # COMPARA A HORA DA URA COM A HORA DO FAX E RETORNA A DIFERENCA EM SEGUNDOS
 def compareTime(start, end):
@@ -119,7 +121,7 @@ def compareTime(start, end):
                 diff = (start_dt - end_dt) 
             
             return diff.seconds
-        except Exception, e:
+        except BaseException, e:
             setRed()
             
             "\rError: %s - %s." % (e.filename,e.strerror)
@@ -134,7 +136,7 @@ def progress(count, total, suffix=''):
     bar = '=' * filled_len + '-' * (bar_len - filled_len)
 
     sys.stdout.write('[%s] %s%s %s\r' % (bar, percents, '%', suffix))
-    sys.stdout.flush()  # As suggested by Rom Ruben
+    sys.stdout. flush()  # As suggested by Rom Ruben
 
 def initProgress():
     i = 0
@@ -148,9 +150,8 @@ def initProgress():
 
 def logDiff(msg=None):
 
-
     setRed()
-    print '\n---> DIFERENCA ENTRE A URA E O FAX: %s SEGUNDOS.\n' % (msg)
+    print '\n---> DIFERENCA ENTRE A URA E O FAX: %s SEGUNDOS.' % (msg)
     setYellow()
     with open(LOG_FILENAME, 'w') as f:
         f.write(str('diff=' + msg))
@@ -163,22 +164,3 @@ class Teste():
         os.chdir(BASEDIR)
         subprocess.call(r'python -m unittest discover -b')
 
-def main():
-
-        try:
-            while True:
-                diff = compareTime(getHoraURA(), getHoraFaxServer())
-                logDiff(str(diff))
-                initProgress()
-               # time.sleep(float( tempoEspera))
-
-        except KeyboardInterrupt:
-            setRed()
-            print '\r---->>> FALHA NA EXECUCAO!!!\n'
-            observer.stop()
-
-        observer.join()
-
-
-if __name__ == '__main__':
-    main()

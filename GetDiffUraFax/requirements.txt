@@ -1,0 +1,5 @@
+ecdsa==0.13
+paramiko==1.16.0
+pycrypto==2.6.1
+pypiwin32==219
+pysftp==0.2.8
